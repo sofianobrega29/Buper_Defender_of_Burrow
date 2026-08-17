@@ -1,4 +1,5 @@
-# CLASSE BASE
+import pygame
+from constantes import *# CLASSE BASE
 class Entidade(pygame.sprite.Sprite):
     def __init__(self, x, y, velocidade):
         super().__init__()
