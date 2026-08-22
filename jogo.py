@@ -7,7 +7,7 @@ pygame.init()
 
 
 TELA = pygame.display.set_mode((LARGURA, ALTURA))
-pygame.display.set_caption("Robot Defense - Template")
+pygame.display.set_caption("Buper Defender Of The Burrow")
 
 FPS = 60
 clock = pygame.time.Clock()
@@ -21,6 +21,8 @@ todos_sprites.add(jogador)
 
 pontos = 0
 spawn_timer = 0
+
+wave = 0
 
 rodando = True
 while rodando:
@@ -37,16 +39,26 @@ while rodando:
                 tiros.add(tiro)
 
     # timer de entrada dos inimigos
-    spawn_timer += 1
-    if spawn_timer > 40:
-        robo = RoboZigueZague(random.randint(40, LARGURA - 40), -40)
-        todos_sprites.add(robo)
-        inimigos.add(robo)
+    spawn_timer += 0.5
+    if spawn_timer > 60:
+        '''inimigo1 = InimigoZigueZague(random.randint(random.randint(1, 40), LARGURA - random.randint(1, 40)), -20)
+        inimigo1.direcao *= random.randint(-3, -1)''' '''Inimigo em desenvolvimento'''
+
+        inimigo2 = InimigoPadrao(random.randint(random.randint(1, 40), LARGURA - random.randint(1, 40)), -20)
+        todos_sprites.add(inimigo2)
+        inimigos.add(inimigo2)
         spawn_timer = 0
+        
+    # Sistema de Waves (O código abaixo é só um teste)
+    if jogador.eliminacoes == 0:
+        wave = 1
+        
+    
 
     # colisão tiro x robô
     colisao = pygame.sprite.groupcollide(inimigos, tiros, True, True)
     pontos += len(colisao)
+    jogador.eliminacoes +=1
 
     # colisão robô x jogador
     if pygame.sprite.spritecollide(jogador, inimigos, True):
@@ -59,13 +71,17 @@ while rodando:
     todos_sprites.update()
 
     # desenhar
-    TELA.fill((20, 20, 20))
+    BG = pygame.image.load("sprites/background/campo.png")
+    BG = pygame.transform.scale(BG, (10, 750))
+    TELA.fill((25, 25, 25))
     todos_sprites.draw(TELA)
 
     #Painel de pontos e vida
-    font = pygame.font.SysFont(None, 30)
-    texto = font.render(f"Vida: {jogador.vida}  |  Pontos: {pontos}", True, (255, 255, 255))
-    TELA.blit(texto, (10, 10))
+    font = pygame.font.SysFont("impact", 30)
+    info_player = font.render(f"Vidas: {jogador.vida}  |  Pontos: {pontos}", True, (255, 255, 255))
+    info_wave = font.render(f"Wave: {wave}", True, (255, 255, 255))
+    TELA.blit(info_player, (10, 10))
+    TELA.blit(info_wave, (650, 10))
 
     pygame.display.flip()
 
