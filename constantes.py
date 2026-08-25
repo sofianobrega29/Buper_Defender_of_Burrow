@@ -1,3 +1,5 @@
+import pygame
+
 LARGURA = 800
 ALTURA = 600
 
