@@ -18,7 +18,7 @@ class Jogador(Entidade):
     def __init__(self, x, y):
         super().__init__(x, y, 5)
         self.image = pygame.image.load("sprites/jogador/buper.png")
-        self.image = pygame.transform.scale(self.image, (84, 97)) 
+        self.image = pygame.transform.scale(self.image, (84, 90)) 
         self.rect = self.image.get_rect(center=(x, y))
 
         self.vida = 5
@@ -42,7 +42,7 @@ class Tiro(Entidade):
     def __init__(self, x, y):
         super().__init__(x, y, 10)
         self.image = pygame.image.load("sprites/jogador/tiro.png")
-        self.image = pygame.transform.scale(self.image, (54, 67))  # amarelo
+        self.image = pygame.transform.scale(self.image, (20, 40))  # amarelo
 
     def update(self):
         self.rect.y -= self.velocidade
@@ -65,9 +65,16 @@ class InimigoPadrao(Robo):
 
         self.image = pygame.image.load("sprites/inimigo/inimigo1.png").convert_alpha()
 
-        self.image = pygame.transform.scale(self.image, (104, 117)) 
+        self.image = pygame.transform.scale(self.image, (70, 120)) 
 
         self.rect = self.image.get_rect(center = (x, y))
+
+        self.hitbox = pygame.Rect(
+            self.rect.x + 15,
+            self.rect.y + 20,
+            54,
+            70
+        )
 
         self.direcao = 1
 
