@@ -64,8 +64,7 @@ class InimigoPadrao(Robo):
         super().__init__(x, y, velocidade=6)
 
         self.image = pygame.image.load("sprites/inimigo/inimigo1.png").convert_alpha()
-
-        self.image = pygame.transform.scale(self.image, (70, 120)) 
+        self.image = pygame.transform.scale(self.image, (60, 180)) 
 
         self.rect = self.image.get_rect(center = (x, y))
 
@@ -80,7 +79,7 @@ class InimigoPadrao(Robo):
 
     def atualizar_posicao(self):
         self.rect.y += self.velocidade
-        self.rect.x += random.choice([-2, -1, 1, 2])
+        '''self.rect.x += random.choice([-2, -1, 1, 2])'''
         self.cont = 0
 
         if self.cont == 10:
@@ -90,6 +89,9 @@ class InimigoPadrao(Robo):
             if self.rect.x <= 0 or self.rect.x >= LARGURA - self.rect.width:
                 self.direcao *= -1
                 self.cont += 1
+
+    def aumentar_velocidade(self):
+        self.velocidade += 2
 
     def update(self):
         self.atualizar_posicao()

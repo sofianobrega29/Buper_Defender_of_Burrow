@@ -16,7 +16,6 @@ pygame.display.set_caption("Buper Defender Of The Burrow")
 
 FPS = 60
 clock = pygame.time.Clock()
-
 todos_sprites = pygame.sprite.Group()
 inimigos = pygame.sprite.Group()
 tiros = pygame.sprite.Group()
@@ -30,7 +29,13 @@ BG = pygame.transform.scale(BG, (LARGURA, ALTURA + 150))
 pontos = 0
 spawn_timer = 0
 
+cont_tiro = 0
+
 wave = 1
+inimigos_wave = 5
+inimigos_spawnados = 0
+intervalo_spawn = 90
+
 
 rodando = True
 
@@ -43,26 +48,42 @@ while rodando:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                tiro = Tiro(jogador.rect.centerx, jogador.rect.y)
-                todos_sprites.add(tiro)
-                tiros.add(tiro)
+                if cont_tiro > 2:
+                    tiro = Tiro(jogador.rect.centerx, jogador.rect.y)
+                    todos_sprites.add(tiro)
+                    tiros.add(tiro)
+                    cont_tiro = 0
+
 
     #Aumento de dificuldade (Teste)
-    if wave == 1:
-        pass
-
+    
+    cont_tiro += 0.1
     #Aumento de waves (Teste)
     if jogador.eliminacoes == 3:
         pass
 
+    spawn_timer += 1
     #Tempo de spawn dos inimigos (Teste)
-    if spawn_timer > 60:
-        inimigo = InimigoPadrao(random.randint(40, LARGURA - 40), -20)
+    if inimigos_spawnados == inimigos_wave:
+        wave += 1
+        inimigos_wave += 2
+        inimigos_spawnados = 0
+        inimigo1.aumentar_velocidade()
+        
+    if inimigos_spawnados <= inimigos_wave:
+        if spawn_timer > intervalo_spawn:
+            inimigo1 = InimigoPadrao(random.randint(40, LARGURA - 40), -20)
 
-        todos_sprites.add(inimigo)
-        inimigos.add(inimigo)
+            todos_sprites.add(inimigo1)
+            inimigos.add(inimigo1)
+            if wave > 4:
+                inimigo2 = InimigoZigueZague(random.randint(40, LARGURA - 40), -20)
+                
+                todos_sprites.add(inimigo2)
+                inimigos.add(inimigo2)
 
-        spawn_timer = 0
+            spawn_timer = 0
+            inimigos_spawnados += 1
 
     #Colisão dos tiros com os inimigos
     colisao = pygame.sprite.groupcollide(inimigos, tiros, True, True)
