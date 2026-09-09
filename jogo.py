@@ -1,13 +1,20 @@
 import pygame
 import random
-from classes import *
+import os
+from map import Mapa
+from jogador import Jogador
+from tiros import Tiro
+from inimigos.inimigo_padrao import InimigoPadrao
+from inimigos.inimigo_veloz import InimigoVeloz
+from inimigos.inimigo_ziguezague import InimigoZigueZague
+
 
 pygame.init()
 
 from constantes import *
 
 FONTEINFO = pygame.font.Font(
-    "sprites/fontes/PressStart2P.ttf",
+    os.path.join(BASE_DIR, "sprites", "fontes", "PressStart2P.ttf"),
     24
 )
 
@@ -23,8 +30,7 @@ tiros = pygame.sprite.Group()
 jogador = Jogador(LARGURA // 2, ALTURA - 60)
 todos_sprites.add(jogador)
 
-BG = pygame.image.load("sprites/background/campo.png")
-BG = pygame.transform.scale(BG, (LARGURA, ALTURA + 150))
+mapa = Mapa()
 
 pontos = 0
 spawn_timer = 0
@@ -59,34 +65,35 @@ while rodando:
     cont_tiro += 0.1
     
     #Aumento de waves (Teste)
-    if jogador.eliminacoes == 3:
-        pass
 
-    spawn_timer += 1
     #Tempo de spawn dos inimigos (Teste)
-    if inimigos_spawnados == inimigos_wave:
+
+    #waves
+    if inimigos_spawnados == inimigos_wave and len(inimigos) == 0:
         wave += 1
         inimigos_wave += 2
         inimigos_spawnados = 0
-        inimigo1.aumentar_velocidade()
-        
-    if inimigos_spawnados <= inimigos_wave:
+        spawn_timer = 0
+
+    #spawn dos inimigos
+    spawn_timer += 1
+
+    if inimigos_spawnados < inimigos_wave:
         if spawn_timer > intervalo_spawn:
             inimigo1 = InimigoPadrao(random.randint(40, LARGURA - 40), -20)
 
             todos_sprites.add(inimigo1)
             inimigos.add(inimigo1)
+            if wave > 4:
+                inimigo3 = InimigoVeloz(random.randint(40, LARGURA - 40), -20)
+                todos_sprites.add(inimigo3)
+                inimigos.add(inimigo3)
+
             if wave > 6:
                 inimigo2 = InimigoZigueZague(random.randint(40, LARGURA - 40), -20)
 
                 todos_sprites.add(inimigo2)
                 inimigos.add(inimigo2)
-
-            if wave > 4:
-                inimigo3 = InimigoVeloz(random.randint(40, LARGURA - 40), -20)
-                
-                todos_sprites.add(inimigo3)
-                inimigos.add(inimigo3)
 
             spawn_timer = 0
             inimigos_spawnados += 1
@@ -108,7 +115,7 @@ while rodando:
     todos_sprites.update()
 
     #Desenho e info do player
-    TELA.fill((0, 0, 0))
+    mapa.desenhar(TELA)
     todos_sprites.draw(TELA)
 
     info_player = FONTEINFO.render(f"Vidas: {jogador.vida} | Pontos: {pontos}", True, (255, 255, 255))
