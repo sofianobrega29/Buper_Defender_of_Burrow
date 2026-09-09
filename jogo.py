@@ -56,8 +56,8 @@ while rodando:
 
 
     #Aumento de dificuldade (Teste)
-    
     cont_tiro += 0.1
+    
     #Aumento de waves (Teste)
     if jogador.eliminacoes == 3:
         pass
@@ -76,11 +76,17 @@ while rodando:
 
             todos_sprites.add(inimigo1)
             inimigos.add(inimigo1)
-            if wave > 4:
+            if wave > 6:
                 inimigo2 = InimigoZigueZague(random.randint(40, LARGURA - 40), -20)
-                
+
                 todos_sprites.add(inimigo2)
                 inimigos.add(inimigo2)
+
+            if wave > 4:
+                inimigo3 = InimigoVeloz(random.randint(40, LARGURA - 40), -20)
+                
+                todos_sprites.add(inimigo3)
+                inimigos.add(inimigo3)
 
             spawn_timer = 0
             inimigos_spawnados += 1
