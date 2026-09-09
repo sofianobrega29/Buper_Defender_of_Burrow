@@ -1,6 +1,6 @@
 import pygame
 
 LARGURA = 800
-ALTURA = 600
+ALTURA = 1000
 
 VELOCIDADE_JOGADOR = 5
