@@ -4,7 +4,7 @@ import os
 
 class Mapa:
     def __init__(self):
-        caminho_mapa = (os.path.join(BASE_DIR, "sprites", "background", "campo.png"))
+        caminho_mapa = (os.path.join(BASE_DIR, "sprites", "background", "campo.jpeg"))
         self.imagem = pygame.image.load(caminho_mapa).convert()
 
         self.imagem = pygame.transform.scale(
