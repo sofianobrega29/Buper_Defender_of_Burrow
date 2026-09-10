@@ -9,7 +9,7 @@ class Jogador(Entidade):
         self.image = pygame.image.load(
             os.path.join(BASE_DIR, "sprites", "jogador", "buper.png")
         )
-        self.image = pygame.transform.scale(self.image, (84, 90)) 
+        self.image = pygame.transform.scale(self.image, (80, 95)) 
         self.rect = self.image.get_rect(center=(x, y))
 
         self.vida = 5

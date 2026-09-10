@@ -10,9 +10,15 @@ class InimigoVeloz(Robo):
         self.image = pygame.image.load(
             os.path.join(BASE_DIR, "sprites", "inimigo", "inimigo1.png")
         ).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (30, 90)) 
 
-        self.rect = self.image.get_rect(center = (x, y))
+        self.image_redimensionada = pygame.transform.scale(self.image, (30, 90)) 
+        self.image_direita = self.image_redimensionada
+        self.image_esquerda = pygame.transform.flip(self.image_redimensionada, True, False)
+
+        self.cont_andar = 0
+        self.velocidade_andar_frame = 15
+
+        self.rect = self.image_redimensionada.get_rect(center = (x, y))
 
         self.hitbox = pygame.Rect(
             self.rect.x + 15,
@@ -22,6 +28,16 @@ class InimigoVeloz(Robo):
         )
 
         self.direcao = 1
+        self.image = self.image_direita
+    
+    def atualizar_andar(self):
+        self.cont_andar += 1
+        if self.cont_andar < self.velocidade_andar_frame:
+            self.image = self.image_direita
+        elif self.cont_andar < self.velocidade_andar_frame * 2:
+            self.image = self.image_esquerda
+        else:
+            self.cont_andar = 0
 
     def atualizar_posicao(self):
         self.rect.y += self.velocidade
@@ -41,5 +57,6 @@ class InimigoVeloz(Robo):
 
     def update(self):
         self.atualizar_posicao()
+        self.atualizar_andar()
         if self.rect.y > ALTURA:
             self.kill()
