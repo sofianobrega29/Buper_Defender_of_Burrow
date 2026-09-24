@@ -7,9 +7,11 @@ from tiros import Tiro
 from inimigos.inimigo_padrao import InimigoPadrao
 from inimigos.inimigo_veloz import InimigoVeloz
 from inimigos.inimigo_ziguezague import InimigoZigueZague
+from sons import *
 
 
 pygame.init()
+pygame.mixer.init()
 
 from constantes import *
 
@@ -42,6 +44,10 @@ inimigos_wave = 5
 inimigos_spawnados = 0
 intervalo_spawn = 90
 
+trilha_principal = TrilhaPrincipal("sons/trilha_sonora2.ogg")
+som_estilingue = Estilingue("sons/estilingue_tiro.mp3") # Aj
+som_cachorro = Cachorro("sons/cachorro.mp3")
+trilha_principal.play()
 
 rodando = True
 
@@ -56,6 +62,7 @@ while rodando:
             if event.key == pygame.K_SPACE:
                 if cont_tiro > 2:
                     tiro = Tiro(jogador.rect.centerx, jogador.rect.y)
+                    som_estilingue.play()
                     todos_sprites.add(tiro)
                     tiros.add(tiro)
                     cont_tiro = 0
@@ -76,7 +83,7 @@ while rodando:
         spawn_timer = 0
 
     #spawn dos inimigos
-    spawn_timer += 1
+    spawn_timer += 0.9
 
     if inimigos_spawnados < inimigos_wave:
         if spawn_timer > intervalo_spawn:
@@ -91,7 +98,6 @@ while rodando:
 
             if wave > 6:
                 inimigo2 = InimigoZigueZague(random.randint(40, LARGURA - 40), -20)
-
                 todos_sprites.add(inimigo2)
                 inimigos.add(inimigo2)
 
@@ -107,6 +113,8 @@ while rodando:
     #Colisão do Buper e os inimigos
     if pygame.sprite.spritecollide(jogador, inimigos, True):
         jogador.vida -= 1
+
+        som_cachorro.play()
 
         if jogador.vida <= 0:
             print("GAME OVER!")
