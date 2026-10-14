@@ -20,7 +20,7 @@ TIPOS = [
 ]
 
 # ondas com chefe -> vida do chefe
-CHEFES = {5: 40, 10: 90}
+CHEFES = {5: 120, 10: 300}
 
 
 class GerenciadorOndas:
@@ -39,6 +39,11 @@ class GerenciadorOndas:
         self.inimigos_spawnados = 0
         self.spawn_timer = 0
         self.intervalo_spawn = 90
+
+        ONDA_INICIAL = 10
+        self.wave = ONDA_INICIAL
+        self.inimigos_wave = 5 + 2 * (ONDA_INICIAL - 1)
+        self.intervalo_spawn = max(40, 90 - 4 * (ONDA_INICIAL - 1))
 
     @property
     def onda_de_chefe(self):
